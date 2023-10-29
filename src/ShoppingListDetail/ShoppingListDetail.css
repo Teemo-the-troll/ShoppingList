@@ -1,0 +1,70 @@
+.list-heading {
+    margin: 0;
+    margin-bottom: 1rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+    & input {
+        border: none;
+        text-align: center;
+
+        &:focus {
+            outline: none;
+        }
+
+        border-bottom: solid thin black;
+    }
+}
+
+.hidden-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.edit-button {
+    margin-left: 1rem;
+}
+
+.control-buttons {
+    position: relative;
+    float: right;
+    margin-bottom: 0.5rem;
+    display: flex;
+
+}
+
+.svg-button {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
+
+    & svg {
+        height: 24px;
+        width: 24px;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.delete-button {
+    position: absolute;
+    right: -2rem;
+    top: 0.4rem;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+
+.container {
+    display: flex;
+    flex-direction: column;
+}

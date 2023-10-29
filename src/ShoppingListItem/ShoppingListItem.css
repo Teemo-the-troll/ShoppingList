@@ -1,0 +1,57 @@
+
+.satisfied {
+    background-color: rgb(128, 128, 128, 0.4);
+    .name-container {
+        text-decoration: black line-through;
+    }
+}
+
+input:focus {
+    outline: none;
+}
+
+.item-container {
+    display: flex;
+    width: max-content;
+    position: relative;
+}
+
+.property-container {
+    /*border: solid thin black;
+    */height: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.checkbox-container {
+    width: 3rem;
+}
+
+.name-container {
+    width: 15rem;
+    border-left: none;
+
+    & input {
+        border: none;
+        background: transparent;
+    }
+
+}
+
+.amount-container {
+    border-left: none;
+    width: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & input {
+        border: none;
+        padding: 0;
+        box-sizing: border-box;
+        background: transparent;
+        width: 3rem;
+    }
+
+}
