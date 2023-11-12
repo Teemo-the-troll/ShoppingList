@@ -11,7 +11,6 @@ export interface ModalProps {
 export class Modal extends React.Component<ModalProps, any> {
     render() {
         return (
-
             <div onClick={this.props.close} className={"backdrop"}>
                 <div onClick={event => event.stopPropagation()} className={"modal-window"}>
                     <div className={"content"}>

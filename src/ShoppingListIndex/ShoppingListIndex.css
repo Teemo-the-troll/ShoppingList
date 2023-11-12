@@ -1,0 +1,11 @@
+.card-container {
+    display: flex;
+}
+
+.heading {
+    display: flex;
+
+    & input {
+
+    }
+}

@@ -1,0 +1,17 @@
+.satisfied-item {
+    text-decoration: black line-through;
+}
+
+.list-tile {
+    background-color: #daddd3;
+    width: 10rem;
+    max-height: 20rem;
+    overflow-y: hidden;
+    padding: 0.6rem;
+    margin: 1rem;
+}
+
+.tile-heading {
+    margin-top: 0.1rem;
+    text-align: center;
+}

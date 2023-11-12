@@ -33,5 +33,14 @@ input[type=number] {
     height: 24px;
     width: 24px;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 

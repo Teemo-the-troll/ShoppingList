@@ -1,95 +1,111 @@
-import React, {ChangeEvent} from 'react';
+import React, { useState, useEffect } from 'react';
 import './ShoppingListDetail.css';
-import {ShoppingListDetailProps, ShoppingListDetailState} from "../Interfaces/ShoppingListDetailProps";
-import {ShoppingListItem} from "../ShoppingListItem/ShoppingListItem";
-import {Modal} from "../modal/Modal";
+import { ShoppingListItem } from '../ShoppingListItem/ShoppingListItem';
+import { Modal } from '../modal/Modal';
 import { UserList } from '../Users/UserList';
 import { Editbutton } from '../buttons/editbutton';
 import { PlusButton } from '../buttons/plusbutton';
 import { CrossButton } from '../buttons/crossbutton';
 import { v4 as uuidv4 } from 'uuid';
-export class ShoppingListDetail extends React.Component<ShoppingListDetailProps, ShoppingListDetailState> {
+import { useParams } from 'react-router-dom';
+import { shoppingLists } from '../data/lists';
+import { User } from '../Interfaces/User';
 
-    constructor(props: ShoppingListDetailProps) {
-        super(props);
+// Define the type for your shopping list item
+type ShoppingListItemType = {
+    id: string;
+    name: string;
+    amount: number;
+    isSatisfied: boolean;
+};
 
-        this.state = {
-            items: this.props.list.items, name: this.props.list.name, members: this.props.list.members,
-            editing: false,
-            openModal: false
+const ShoppingListDetail = () => {
+    const { id } = useParams();
+    const [items, setItems] = useState<ShoppingListItemType[]>([]); // Use the defined type
+    const [members, setMembers] = useState<User[]>([]); // Assuming members are strings, adjust as needed
+    const [editing, setEditing] = useState(false);
+    const [name, setName] = useState('');
+    const [openModal, setOpenModal] = useState(false);
+
+    useEffect(() => {
+        let list = shoppingLists.find((list) => list.id === id);
+        if (list === undefined) {
+            throw new Error('List not found');
         }
-    }
+        setItems(list.items);
+        setName(list.name);
+        setMembers(list.members);
+        setEditing(false);
+        setOpenModal(false);
+    }, [id]);
 
-    changeName(event: ChangeEvent<HTMLInputElement>) {
-        this.setState({name: event.target.value})
-    }
+    const changeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setName(event.target.value);
+    };
 
-    deleteItem(id: string) {
-        let tempList = this.state.items.filter(item => {
-            return item.id != id;
-        })
-        this.setState({items: tempList});
-    }
+    const deleteItem = (itemId: string) => {
+        setItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+    };
 
-    showUsers() {
-        this.setState({openModal: true});
-    }
-    generateUUid() {
+    const showUsers = () => {
+        setOpenModal(true);
+    };
+
+    const generateUUid = () => {
         return uuidv4();
-    }
-    addItem() {
-        let tempList = this.state.items;
-        tempList.push({id: this.generateUUid(), name: "New Item", amount: 1, isSatisfied: false});
-        this.setState({items: tempList});
-        console.log(this.state.items)
-    }
+    };
 
-    markItemAsSatisfied(id: string) {
-        let tempList = this.state.items;
-        tempList.forEach(item => {
-            if (item.id === id) {
-                item.isSatisfied = !item.isSatisfied;
-            }
-        })
-        this.setState({items: tempList});
-    }
-    closeModal() {
-        this.setState({openModal: false});
-    }
+    const addItem = () => {
+        setItems((prevItems) => [
+            ...prevItems,
+            { id: generateUUid(), name: 'New Item', amount: 1, isSatisfied: false },
+        ]);
+    };
 
-    render() {
-        return <div className={"container"}>
-            {this.state.openModal && <Modal close={() => this.closeModal()} component={<UserList users={this.state.members}/>}/> }
-            <div style={{margin: "0 auto", width: "fit-content"}}>
-                <h3 className={"list-heading"}>
-                    <input type="text" value={this.state.name} onChange={e => this.changeName(e)}/>
-                    <Editbutton onClick={() => {}}/>
+    const markItemAsSatisfied = (itemId: string) => {
+        setItems((prevItems) =>
+            prevItems.map((item) => (item.id === itemId ? { ...item, isSatisfied: !item.isSatisfied } : item))
+        );
+    };
+
+    const closeModal = () => {
+        setOpenModal(false);
+    };
+
+    return (
+        <div className={'container'}>
+            {openModal && <Modal close={() => closeModal()} component={<UserList users={members} />} />}
+            <div style={{ margin: '0 auto', width: 'fit-content' }}>
+                <h3 className={'list-heading'}>
+                    <input type="text" value={name} onChange={(e) => changeName(e)} />
+                    <Editbutton onClick={() => {}} />
                 </h3>
-                <div className={"control-buttons"}>
-                    <button className={"hidden-button svg-button"} onClick={() => this.showUsers()}>
+                <div className={'control-buttons'}>
+                    <button className={'hidden-button svg-button'} onClick={() => showUsers()}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43" fill="none">
-                            <path d="M0 0H43V43H0V0Z" fill="#D9D9D9"/>
-                            <ellipse cx="21.5" cy="36.5" rx="17.5" ry="13.5" fill="white"/>
-                            <circle cx="22" cy="11" r="9" fill="white"/>
+                            <path d="M0 0H43V43H0V0Z" fill="#D9D9D9" />
+                            <ellipse cx="21.5" cy="36.5" rx="17.5" ry="13.5" fill="white" />
+                            <circle cx="22" cy="11" r="9" fill="white" />
                         </svg>
                     </button>
-                    <Editbutton onClick={() => this.setState({editing: !this.state.editing})}/>
-                    <PlusButton onClick={() => this.addItem()}/>
+                    <Editbutton onClick={() => setEditing(!editing)} />
+                    <PlusButton onClick={() => addItem()} />
                 </div>
                 <div>
-                    {this.state.items.map((item) => {
-                        return (<div className={"item-container"}>
-                            <ShoppingListItem key={item.id} satisfyFunc={(itemId: string) => this.markItemAsSatisfied(itemId)} item={item}/>
-                            {this.state.editing &&
-                                <div className={"delete-button"}>
-                                    <CrossButton key={item.id} onClick={() => this.deleteItem(item.id)}/>
+                    {items.map((item) => (
+                        <div className={'item-container'} key={item.id}>
+                            <ShoppingListItem satisfyFunc={(itemId: string) => markItemAsSatisfied(itemId)} item={item} />
+                            {editing && (
+                                <div className={'delete-button'}>
+                                    <CrossButton key={item.id} onClick={() => deleteItem(item.id)} />
                                 </div>
-                            }
-                        </div>)
-                    })}
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
-        </div>;
-    }
+        </div>
+    );
+};
 
-}
+export default ShoppingListDetail;
