@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import './ShoppingListDetail.css';
+import React, {useState, useEffect, useContext} from 'react';
+import './ShoppingListDetail.scss';
 import { ShoppingListItem } from '../ShoppingListItem/ShoppingListItem';
 import { Modal } from '../modal/Modal';
 import { UserList } from '../Users/UserList';
@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { useParams } from 'react-router-dom';
 import { shoppingLists } from '../data/lists';
 import { User } from '../Interfaces/User';
+import {ThemeContext} from "../ThemeProvider/ThemeProvider";
 
 // Define the type for your shopping list item
 type ShoppingListItemType = {
@@ -19,7 +20,10 @@ type ShoppingListItemType = {
     isSatisfied: boolean;
 };
 
-const ShoppingListDetail = () => {
+
+
+export function ShoppingListDetail() {
+    const theme = useContext(ThemeContext);
     const { id } = useParams();
     const [items, setItems] = useState<ShoppingListItemType[]>([]); // Use the defined type
     const [members, setMembers] = useState<User[]>([]); // Assuming members are strings, adjust as needed
@@ -68,17 +72,24 @@ const ShoppingListDetail = () => {
         );
     };
 
+    const switchMode = () => {
+        console.log(theme)
+        theme.toggleTheme();
+        console.log(theme)
+    }
+
     const closeModal = () => {
         setOpenModal(false);
     };
 
     return (
-        <div className={'container'}>
+        <div className={'container ' + theme.theme}>
             {openModal && <Modal close={() => closeModal()} component={<UserList users={members} />} />}
             <div style={{ margin: '0 auto', width: 'fit-content' }}>
                 <h3 className={'list-heading'}>
                     <input type="text" value={name} onChange={(e) => changeName(e)} />
                     <Editbutton onClick={() => {}} />
+                    <Editbutton onClick={() => switchMode()} />
                 </h3>
                 <div className={'control-buttons'}>
                     <button className={'hidden-button svg-button'} onClick={() => showUsers()}>
@@ -94,7 +105,7 @@ const ShoppingListDetail = () => {
                 <div>
                     {items.map((item) => (
                         <div className={'item-container'} key={item.id}>
-                            <ShoppingListItem satisfyFunc={(itemId: string) => markItemAsSatisfied(itemId)} item={item} />
+                            <ShoppingListItem satisfyFunc={(itemId: string) => markItemAsSatisfied(itemId)} propItem={item} />
                             {editing && (
                                 <div className={'delete-button'}>
                                     <CrossButton key={item.id} onClick={() => deleteItem(item.id)} />

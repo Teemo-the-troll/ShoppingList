@@ -9,7 +9,6 @@
 }
 
 .modal-window {
-    background-color: white;
     z-index: 3;
     position: fixed;
     top: 50%;
@@ -23,4 +22,12 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.modal-window.light {
+    background-color: white;
+}
+
+.modal-window.dark {
+    background-color: #18181e;
 }

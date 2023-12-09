@@ -1,8 +1,25 @@
 
-.satisfied {
+.satisfied.dark {
+    background-color: rgb(128, 128, 128, 0.4);
+    .name-container {
+        text-decoration: whitesmoke line-through;
+    }
+}
+
+.satisfied.light {
     background-color: rgb(128, 128, 128, 0.4);
     .name-container {
         text-decoration: black line-through;
+    }
+}
+
+input {
+    background-color: transparent;
+}
+
+.dark {
+    input {
+        color: whitesmoke;
     }
 }
 
@@ -17,8 +34,7 @@ input:focus {
 }
 
 .property-container {
-    /*border: solid thin black;
-    */height: 2rem;
+    height: 2rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,7 +52,6 @@ input:focus {
         border: none;
         background: transparent;
     }
-
 }
 
 .amount-container {
@@ -53,5 +68,4 @@ input:focus {
         background: transparent;
         width: 3rem;
     }
-
 }

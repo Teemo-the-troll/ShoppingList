@@ -1,0 +1,33 @@
+
+
+
+.list-tile.light {
+    background-color: #daddd3;
+    border: solid thin #2f2f2f;
+
+    .satisfied-item {
+        text-decoration: black line-through;
+    }
+}
+
+.list-tile.dark {
+    background-color: #2f2f2f;
+    border: solid thin #daddd3;
+    .satisfied-item {
+        text-decoration: whitesmoke line-through;
+    }
+}
+
+
+.list-tile {
+    width: 10rem;
+    max-height: 20rem;
+    overflow-y: hidden;
+    padding: 0.6rem;
+    margin: 1rem;
+}
+
+.tile-heading {
+    margin-top: 0.1rem;
+    text-align: center;
+}

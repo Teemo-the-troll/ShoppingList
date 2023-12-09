@@ -1,63 +1,53 @@
-import React from 'react';
-import '../App/App.css';
-import './ShoppingListIndex.css';
-import {IShoppingList} from "../Interfaces/IShoppingList";
+import React, {useContext} from 'react';
+import '../App/App.scss';
+import './ShoppingListIndex.scss';
 import {ShoppingListTile} from '../ShoppingListTile/ShoppingListTile';
-import {CrossButton} from '../buttons/crossbutton';
 import {PlusButton} from '../buttons/plusbutton';
 import {shoppingLists} from "../data/lists";
-import {Link} from 'react-router-dom';
 import {Modal} from '../modal/Modal';
+import {ThemeContext} from "../ThemeProvider/ThemeProvider";
 
-export class ShoppingListIndex extends React.Component {
-    state = {
-        showModal: false,
-        newList: {
-            name: "", items: []
-        },
-        lists: shoppingLists
-    }
+export function ShoppingListIndex() {
+    const [showModal, setShowModal] = React.useState(false);
+    const [newList, setNewList] = React.useState({name: "", items: []});
+    const [lists, setLists] = React.useState(shoppingLists);
 
-    changeName(event: React.ChangeEvent<HTMLInputElement>) {
-        this.state.newList.name = event.target.value;
+    const changeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setNewList({name: event.target.value, items: []});
     };
 
-    createNewList = () => {
+    const createNewList = () => {
         const temp = {
-            id: "testid", owner: "string", name: this.state.newList.name, members: [], items: []
+            id: "testid", owner: "string", name: newList.name, members: [], items: []
         };
-
-        this.setState((prevState: {showModal: boolean, newList: {name: string, items: any[]}, lists: IShoppingList[]}) => {
-            const updatedLists = [...prevState.lists, temp];
-            return { lists: updatedLists };
-        });
+        const updatedLists = [...lists, temp];
+        setLists(updatedLists);
     };
 
-    deleteList = (listId: string) => {
-        this.setState((prevState: {showModal: boolean, newList: {name: string, items: any[]}, lists: IShoppingList[]}) => {
-            const updatedLists = prevState.lists.filter((list) => list.id !== listId);
-            return { lists: updatedLists };
-        });
+    const deleteList = (listId: string) => {
+        const updatedLists = lists.filter((list) => list.id !== listId);
+        setLists(updatedLists);
     }
 
-    render() {
-        const {showModal} = this.state;
-        return (<div>
+    const themeContext = useContext(ThemeContext);
+    return (
+        <div>
+        <ThemeContext.Provider value={themeContext}>
             {showModal && <Modal component={<div>
-                <input type="text" onChange={(e) => this.changeName(e)}/>
-                <button onClick={() => this.createNewList()}>
+                <input type="text" onChange={(e) => changeName(e)}/>
+                <button onClick={() => createNewList()}>
                     Submit
                 </button>
-            </div>} close={() => this.setState({showModal: false})}/>}
+            </div>} close={() => setShowModal(false)}/>}
             <div className={"heading"}>
                 <input type="text"/>
-                <PlusButton onClick={() => this.setState({showModal: true})}/>
+                <PlusButton onClick={() => setShowModal(true)}/>
             </div>
             <div className={"card-container"}>
-                {this.state.lists.map(list =>
-                    <ShoppingListTile destroy={() => this.deleteList(list.id)}    list={list} key={list.name}/>
-                )}
+                {lists.map(list => <ShoppingListTile destroy={() => deleteList(list.id)} list={list}
+                                                                key={list.name}/>)}
             </div>
-        </div>);
-    }
+        </ThemeContext.Provider>
+    </div>);
+
 }

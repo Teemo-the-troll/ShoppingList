@@ -1,47 +1,38 @@
-import React, {ChangeEvent} from 'react';
-import '../App/App.css';
-import './ShoppingListItem.css';
+import React, {ChangeEvent, useContext} from 'react';
+import '../App/App.scss';
+import './ShoppingListItem.scss';
 import {IShoppingListItem} from "../Interfaces/IShoppingListItem";
+import {ThemeContext} from "../ThemeProvider/ThemeProvider";
 
 
-export class ShoppingListItem extends React.Component<{ item: IShoppingListItem, satisfyFunc: Function }, IShoppingListItem> {
+export function ShoppingListItem({propItem, satisfyFunc}: { propItem: IShoppingListItem, satisfyFunc: Function }) {
+    const [item, setItem] = React.useState(propItem);
 
-    constructor(props: { item: IShoppingListItem, satisfyFunc: Function }) {
-        super(props);
-        this.state = {
-            name: props.item.name,
-            amount: props.item.amount,
-            isSatisfied: props.item.isSatisfied,
-            id: this.props.item.id
-        }
+    const themeContext = useContext(ThemeContext);
 
+    const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setItem({...item, name: event.target.value});
     }
 
-    handleNameChange(event: ChangeEvent<HTMLInputElement>) {
-        this.setState({name: event.target.value})
+    const amountChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setItem({...item, amount: Number.parseInt(event.target.value)});
     }
 
-    amountChange(event: ChangeEvent<HTMLInputElement>) {
-        this.setState({amount: Number.parseInt(event.target.value)})
+    const satisfyItem = () => {
+        setItem({...item, isSatisfied: !item.isSatisfied});
+        satisfyFunc(item.id);
     }
-
-    satisfyItem() {
-        this.setState({isSatisfied: !this.state.isSatisfied});
-        this.props.satisfyFunc(this.props.item.id);
-    }
-
-    render() {
-        return (<div className={"item-container " + (this.state.isSatisfied ? " satisfied" : "")}>
+    return (<div className={"item-container " + (item.isSatisfied ? " satisfied " : "") + themeContext.theme}>
             <div className={"property-container checkbox-container"}>
-                <input checked={this.state.isSatisfied} type="checkbox"
-                       onChange={() => this.satisfyItem()}/>
+                <input checked={item.isSatisfied} type="checkbox"
+                       onChange={() => satisfyItem()}/>
             </div>
             <div className={"property-container name-container"}>
-                <input type="text" onChange={e => this.handleNameChange(e)} value={this.state.name}/>
+                <input type="text" onChange={e => handleNameChange(e)} value={item.name}/>
             </div>
             <div className={"property-container amount-container"}>
-                <input type="number" onChange={e => this.amountChange(e)} value={this.state.amount}/>
+                <input type="number" onChange={e => amountChange(e)} value={item.amount}/>
             </div>
         </div>);
-    }
+
 }

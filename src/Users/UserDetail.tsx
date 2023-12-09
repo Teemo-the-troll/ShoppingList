@@ -1,6 +1,6 @@
 import React from "react";
 import { User } from "../Interfaces/User";
-import "../App/App.css";
+import "../App/App.scss";
 import { CrossButton } from "../buttons/crossbutton";
 import "./UserDetail.css";
 
@@ -29,7 +29,7 @@ export class UserDetail extends React.Component<UserDetailProps, any> {
                     {this.props.user.id}
                 </div>
                 <div>
-                    <CrossButton onClick={() => this.props.delete(this.props.user.id)}/>
+                    <CrossButton onClick={this.props.delete(this.props.user.id)}/>
                 </div>
             </div>
         );
