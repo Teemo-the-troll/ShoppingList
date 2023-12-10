@@ -31,7 +31,7 @@ export function ShoppingListIndex() {
 
     const themeContext = useContext(ThemeContext);
     return (
-        <div>
+        <div className={"index-container"}>
         <ThemeContext.Provider value={themeContext}>
             {showModal && <Modal component={<div>
                 <input type="text" onChange={(e) => changeName(e)}/>

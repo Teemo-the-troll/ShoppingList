@@ -8,7 +8,8 @@
     & input {
         border: none;
         text-align: center;
-
+        max-width: 30vw;
+        min-width: 10vw;
         &:focus {
             outline: none;
         }
@@ -42,7 +43,6 @@
     float: right;
     margin-bottom: 0.5rem;
     display: flex;
-
 }
 
 .svg-button {
@@ -69,8 +69,27 @@
     }
 }
 
-
-.container {
+.content-container {
+    margin: 0 auto;
+    width: fit-content;
     display: flex;
     flex-direction: column;
+}
+
+.items-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    margin-bottom: 1rem;
+    width: 100%;
+    max-width: 60vw;
+}
+
+
+.shoppinglist-detail-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5vh;
 }

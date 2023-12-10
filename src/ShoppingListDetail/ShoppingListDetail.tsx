@@ -72,24 +72,17 @@ export function ShoppingListDetail() {
         );
     };
 
-    const switchMode = () => {
-        console.log(theme)
-        theme.toggleTheme();
-        console.log(theme)
-    }
-
     const closeModal = () => {
         setOpenModal(false);
     };
 
     return (
-        <div className={'container ' + theme.theme}>
+        <div className={'shoppinglist-detail-container ' + theme.theme}>
             {openModal && <Modal close={() => closeModal()} component={<UserList users={members} />} />}
-            <div style={{ margin: '0 auto', width: 'fit-content' }}>
+            <div className={"content-container"}>
                 <h3 className={'list-heading'}>
                     <input type="text" value={name} onChange={(e) => changeName(e)} />
                     <Editbutton onClick={() => {}} />
-                    <Editbutton onClick={() => switchMode()} />
                 </h3>
                 <div className={'control-buttons'}>
                     <button className={'hidden-button svg-button'} onClick={() => showUsers()}>
@@ -102,7 +95,7 @@ export function ShoppingListDetail() {
                     <Editbutton onClick={() => setEditing(!editing)} />
                     <PlusButton onClick={() => addItem()} />
                 </div>
-                <div>
+                <div className={"items-container"}>
                     {items.map((item) => (
                         <div className={'item-container'} key={item.id}>
                             <ShoppingListItem satisfyFunc={(itemId: string) => markItemAsSatisfied(itemId)} propItem={item} />
@@ -117,6 +110,6 @@ export function ShoppingListDetail() {
             </div>
         </div>
     );
-};
+}
 
 export default ShoppingListDetail;
