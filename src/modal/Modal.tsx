@@ -12,9 +12,7 @@ export function Modal(props: ModalProps) {
     return (
         <div onClick={props.close} className={"backdrop"}>
             <div onClick={event => event.stopPropagation()} className={"modal-window " + themeContext.theme}>
-                <div className={"content"}>
                     {props.component}
-                </div>
             </div>
         </div>);
 }

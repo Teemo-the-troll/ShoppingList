@@ -6,12 +6,14 @@ import {PlusButton} from '../buttons/plusbutton';
 import {shoppingLists} from "../data/lists";
 import {Modal} from '../modal/Modal';
 import {ThemeContext} from "../ThemeProvider/ThemeProvider";
+import {useTranslation} from "react-i18next";
 
 export function ShoppingListIndex() {
     const [showModal, setShowModal] = React.useState(false);
     const [newList, setNewList] = React.useState({name: "", items: []});
     const [lists, setLists] = React.useState(shoppingLists);
 
+    const {t} = useTranslation();
     const changeName = (event: React.ChangeEvent<HTMLInputElement>) => {
         setNewList({name: event.target.value, items: []});
     };
@@ -32,11 +34,17 @@ export function ShoppingListIndex() {
     const themeContext = useContext(ThemeContext);
     return (
         <div className={"index-container"}>
+            <h3>
+                {t('index-title')}
+            </h3>
+
         <ThemeContext.Provider value={themeContext}>
-            {showModal && <Modal component={<div>
+            {   showModal &&
+                <Modal component={
+                    <div className={"modal-input"}>
                 <input type="text" onChange={(e) => changeName(e)}/>
                 <button onClick={() => createNewList()}>
-                    Submit
+                    {t('submit-create')}
                 </button>
             </div>} close={() => setShowModal(false)}/>}
             <div className={"heading"}>
