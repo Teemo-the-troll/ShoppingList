@@ -1,47 +1,36 @@
 import React from "react";
-import { User } from "../Interfaces/User";
-import { UserDetail } from "./UserDetail";
-import { PlusButton } from "../buttons/plusbutton";
-import { v4 as uuidv4 } from 'uuid';
+import {User} from "../Interfaces/User";
+import {UserDetail} from "./UserDetail";
+import {PlusButton} from "../buttons/plusbutton";
+import {v4 as uuidv4} from 'uuid';
 
 
 export interface IUserListProps {
     users: User[];
 }
 
-export class UserList extends React.Component<IUserListProps, IUserListProps> {
+export function UserList(props: IUserListProps) {
 
-    constructor(props: IUserListProps) {
-        super(props);
-        this.state = {
-            users: props.users
-        }
-    }
+    const [users, setUsers] = React.useState<User[]>(props.users);
 
-    addUser(id: string) {
+    const addUser = (id: string) => {
         let uuid = uuidv4();
-        this.setState({
-            users: [...this.state.users, {id: uuid}]
-        });
+        setUsers([...users, {id: uuid}]);
     }
 
-    deleteUser(id: string) {
-        this.setState({
-            users: this.state.users.filter((user) => user.id !== id)
-        });
+    const deleteUser = (id: string) => {
+        const tempUsers = users.filter((user) => user.id !== id);
+        setUsers(tempUsers);
     }
 
-    render() {
-        return (
-            <div>
-                <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-                    <h3>Users</h3>
-                    <PlusButton onClick={() => this.addUser("1")}/>
-                </div>
-                <div className={"users-container"}>
-                    {this.state.users.map((user) => <UserDetail key={user.id} user={user} delete={(userId: string) => this.deleteUser(userId)} />)}
-                </div>
+    return (<div>
+            <div style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
+                <h3>Users</h3>
+                <PlusButton onClick={() => addUser("1")}/>
             </div>
-        );
-    }
+            <div className={"users-container"}>
+                {users.map((user) => <UserDetail key={user.id} user={user}
+                                                 deleteFunc={() => deleteUser(user.id)}/>)}
+            </div>
+        </div>);
 }
