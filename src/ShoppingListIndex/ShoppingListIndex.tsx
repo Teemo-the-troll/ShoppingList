@@ -7,6 +7,7 @@ import {shoppingLists} from "../data/lists";
 import {Modal} from '../modal/Modal';
 import {ThemeContext} from "../ThemeProvider/ThemeProvider";
 import {useTranslation} from "react-i18next";
+import {Bar, BarChart, CartesianGrid, Legend, Tooltip, XAxis, YAxis} from "recharts";
 
 export function ShoppingListIndex() {
     const [showModal, setShowModal] = React.useState(false);
@@ -31,6 +32,14 @@ export function ShoppingListIndex() {
         setLists(updatedLists);
     }
 
+    //get the count of items in each list
+    // create a graph with the data
+    const graphData = shoppingLists.map((list) => ({
+        name: list.name,
+        articles: list.items.length,
+    }));
+
+
     const themeContext = useContext(ThemeContext);
     return (
         <div className={"index-container"}>
@@ -50,6 +59,16 @@ export function ShoppingListIndex() {
             <div className={"heading"}>
                 <input type="text"/>
                 <PlusButton onClick={() => setShowModal(true)}/>
+            </div>
+            <div className={"graph-container"}>
+                <BarChart width={600} height={300} data={graphData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="articles" fill="#8884d8" />
+                </BarChart>
             </div>
             <div className={"card-container"}>
                 {lists.map(list => <ShoppingListTile destroy={() => deleteList(list.id)} list={list}

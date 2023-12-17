@@ -93,3 +93,15 @@
     flex-direction: column;
     margin-top: 5vh;
 }
+
+.pie-chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5vh;
+    height: 8rem;
+    aspect-ratio: 1/1;
+    * {
+        transition: 0s;
+    }
+}

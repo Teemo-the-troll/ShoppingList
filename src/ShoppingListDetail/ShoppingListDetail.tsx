@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import { shoppingLists } from '../data/lists';
 import { User } from '../Interfaces/User';
 import {ThemeContext} from "../ThemeProvider/ThemeProvider";
+import {PieChart} from "react-minimal-pie-chart";
 
 // Define the type for your shopping list item
 type ShoppingListItemType = {
@@ -76,6 +77,25 @@ export function ShoppingListDetail() {
         setOpenModal(false);
     };
 
+    const data = () => {
+        //return the amount of finished and unfinished items
+        //also show the finished/unfinished text in the pie chart
+
+        let finished = 0;
+        let unfinished = 0;
+        items.forEach((item) => {
+            if (item.isSatisfied) {
+                finished++;
+            } else {
+                unfinished++;
+            }
+        });
+        return [
+            { title: 'Finished', value: finished, color: '#00FF00' },
+            { title: 'Unfinished', value: unfinished, color: '#FF0000' },
+        ];
+    }
+
     return (
         <div className={'shoppinglist-detail-container ' + theme.theme}>
             {openModal && <Modal close={() => closeModal()} component={<UserList users={members} />} />}
@@ -84,6 +104,13 @@ export function ShoppingListDetail() {
                     <input type="text" value={name} onChange={(e) => changeName(e)} />
                     <Editbutton onClick={() => {}} />
                 </h3>
+                <div className={"pie-chart-container"}>
+                    <PieChart
+                        data={data()}
+                        label={({dataEntry}) => dataEntry.value}
+                    />
+
+                </div>
                 <div className={'control-buttons'}>
                     <button className={'hidden-button svg-button'} onClick={() => showUsers()}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="43" height="43" viewBox="0 0 43 43" fill="none">
